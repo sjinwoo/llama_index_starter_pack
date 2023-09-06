@@ -1,0 +1,30 @@
+[tool.poetry]
+name = "streamlit-term-definition"
+version = "0.1.0"
+description = ""
+authors = ["jwson"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+altair = "4.2.2"
+langchain = "0.0.154"
+llama-index = "0.6.13"
+numpy = "1.24.3"
+openai = "0.27.7"
+pandas = "2.0.2"
+pillow = "9.5.0"
+pytesseract = "0.3.10"
+sentencepiece = "0.1.99"
+sqlalchemy = "2.0.15"
+streamlit-chat = "0.0.2.2"
+tokenizers = "0.13.3"
+torch = "2.0.1"
+torchvision = "0.15.2"
+transformers = "4.29.2"
+streamlit = "1.19.0"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
