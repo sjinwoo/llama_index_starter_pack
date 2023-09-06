@@ -5,6 +5,8 @@ from langchain.prompts.chat import (
     HumanMessagePromptTemplate,
 )
 
+from llama_index.prompts.base import LangchainPromptTemplate
+
 from llama_index.prompts.prompts import QuestionAnswerPrompt, RefinePrompt
 
 # Text QA templates
@@ -51,12 +53,16 @@ CHAT_REFINE_PROMPT_TMPL_MSGS = [
 ]
 
 CHAT_REFINE_PROMPT_LC = ChatPromptTemplate.from_messages(CHAT_REFINE_PROMPT_TMPL_MSGS)
-CHAT_REFINE_PROMPT = RefinePrompt.from_langchain_prompt(CHAT_REFINE_PROMPT_LC)
+# CHAT_REFINE_PROMPT = RefinePrompt.from_langchain_prompt(CHAT_REFINE_PROMPT_LC)
+CHAT_REFINE_PROMPT = LangchainPromptTemplate(CHAT_REFINE_PROMPT_LC)
+
 
 # refine prompt selector
 DEFAULT_REFINE_PROMPT_SEL_LC = ConditionalPromptSelector(
-    default_prompt=DEFAULT_REFINE_PROMPT.get_langchain_prompt(),
-    conditionals=[(is_chat_model, CHAT_REFINE_PROMPT.get_langchain_prompt())],
+    default_prompt=DEFAULT_REFINE_PROMPT.get_template(),
+    conditionals=[(is_chat_model, CHAT_REFINE_PROMPT.get_template())],
+    # default_prompt=DEFAULT_REFINE_PROMPT.get_langchain_prompt(),
+    # conditionals=[(is_chat_model, CHAT_REFINE_PROMPT.get_langchain_prompt())],
 )
 REFINE_TEMPLATE = RefinePrompt(langchain_prompt_selector=DEFAULT_REFINE_PROMPT_SEL_LC)
 

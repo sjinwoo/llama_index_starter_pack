@@ -111,9 +111,16 @@ setup_tab, terms_tab, upload_tab, query_tab = st.tabs(
     ["Setup", "All Terms", "Upload/Extract Terms", "Query Terms"]
 )
 
+## Get API key
+PATH_API_KEY = "C:\\Users\\jwson\\Desktop\\jwson\\llama_index_starter_pack\\openai_key.txt"
+
+with open(PATH_API_KEY, "r") as f:
+    key_openai = f.readline()
+    f.close()
+
 with setup_tab:
     st.subheader("LLM Setup")
-    api_key = st.text_input("Enter your OpenAI API key here", type="password")
+    api_key = st.text_input(key_openai, type="password")
     llm_name = st.selectbox(
         "Which LLM?", ["text-davinci-003", "gpt-3.5-turbo", "gpt-4"]
     )
