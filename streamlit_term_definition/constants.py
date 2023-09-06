@@ -15,7 +15,7 @@ DEFAULT_TEXT_QA_PROMPT_TMPL = (
     "---------------------\n"
     "{context_str}"
     "\n---------------------\n"
-    "Given the context information, directly answer the following question "
+    "Given the context information, directly answer the following question"
     "(if you don't know the answer, use the best of your knowledge): {query_str}\n"
 )
 TEXT_QA_TEMPLATE = QuestionAnswerPrompt(DEFAULT_TEXT_QA_PROMPT_TMPL)
@@ -53,19 +53,17 @@ CHAT_REFINE_PROMPT_TMPL_MSGS = [
 ]
 
 CHAT_REFINE_PROMPT_LC = ChatPromptTemplate.from_messages(CHAT_REFINE_PROMPT_TMPL_MSGS)
-# CHAT_REFINE_PROMPT = RefinePrompt.from_langchain_prompt(CHAT_REFINE_PROMPT_LC)
 CHAT_REFINE_PROMPT = RefinePrompt.from_langchain_prompt(CHAT_REFINE_PROMPT_LC)
 
 
 # refine prompt selector
 DEFAULT_REFINE_PROMPT_SEL_LC = ConditionalPromptSelector(
-    # default_prompt=DEFAULT_REFINE_PROMPT.get_template(),
-    # conditionals=[(is_chat_model, CHAT_REFINE_PROMPT.get_template())],
-    default_prompt=DEFAULT_REFINE_PROMPT.get_langchain_prompt(),
-    conditionals=[(is_chat_model, CHAT_REFINE_PROMPT.get_langchain_prompt())],
+    default_prompt=DEFAULT_REFINE_PROMPT.get_langchain_prompt(),                   
+    conditionals=[(is_chat_model, CHAT_REFINE_PROMPT.get_langchain_prompt())],      # Chat 모델인 경우,
 )
 REFINE_TEMPLATE = RefinePrompt(langchain_prompt_selector=DEFAULT_REFINE_PROMPT_SEL_LC)
 
+# default prompt using term extract
 DEFAULT_TERM_STR = (
     "Make a list of terms and definitions that are defined in the context, "
     "with one pair on each line. "
@@ -73,6 +71,7 @@ DEFAULT_TERM_STR = (
     "Write each line as as follows:\nTerm: <term> Definition: <definition>"
 )
 
+# pre-entered term definition (Dictionary)
 DEFAULT_TERMS = {
     "New York City": "The most populous city in the United States, located at the southern tip of New York State, and the largest metropolitan area in the U.S. by both population and urban area.",
     "boroughs": "Five administrative divisions of New York City, each coextensive with a respective county of the state of New York: Brooklyn, Queens, Manhattan, The Bronx, and Staten Island.",

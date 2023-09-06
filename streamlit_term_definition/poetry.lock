@@ -719,13 +719,13 @@ qdrant = ["qdrant-client (>=1.1.2,<2.0.0)"]
 
 [[package]]
 name = "llama-index"
-version = "0.6.13"
+version = "0.6.15"
 description = "Interface between LLMs and your data"
 optional = false
 python-versions = "*"
 files = [
-    {file = "llama_index-0.6.13-py3-none-any.whl", hash = "sha256:8a836ed4869142f27369139c4f1f82aa0998a606077b269af70740f5a0674a53"},
-    {file = "llama_index-0.6.13.tar.gz", hash = "sha256:c6a9304a47ef55486261d6513a47e5112564a15ec5b3ef54dcf01bdcb10b9456"},
+    {file = "llama_index-0.6.15-py3-none-any.whl", hash = "sha256:8f7a1be0b0f2e459e0e839066bd6fc21fc2c6d1905979718c19aa2ce1c3f9aba"},
+    {file = "llama_index-0.6.15.tar.gz", hash = "sha256:8a0d782beb0ad03f1e3033e779407127891aa95e58248f8798f9c469d63d362f"},
 ]
 
 [package.dependencies]
@@ -2579,4 +2579,4 @@ testing = ["big-O", "jaraco.functools", "jaraco.itertools", "more-itertools", "p
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.11"
-content-hash = "35432ea1aa89df2a5b7c2ccb4f6944bfbfbb63faf15e2fd7a3e81976d8d73fbe"
+content-hash = "5ad6bbe9399dabadc706c65d0392e28f15f0a0bad21af3dfee4f24e0ca754f36"

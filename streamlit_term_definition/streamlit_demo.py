@@ -7,7 +7,7 @@ from llama_index import (
     GPTVectorStoreIndex,
     GPTListIndex,
     LLMPredictor,
-    ServiceContext,
+    ServiceContext, # index & query
     SimpleDirectoryReader,
     PromptHelper,
     StorageContext,
@@ -75,13 +75,13 @@ def extract_terms(documents, term_extract_str, llm_name, model_temperature, api_
     }
     return terms_to_definition
 
-
+# insert "term: definition" at Doc
 def insert_terms(terms_to_definition):
     for term, definition in terms_to_definition.items():
         doc = Document(f"Term: {term}\nDefinition: {definition}")
         st.session_state["llama_index"].insert(doc)
 
-
+# 
 @st.cache_resource
 def initialize_index(llm_name, model_temperature, api_key):
     """Create the GPTSQLStructStoreIndex object."""
@@ -118,6 +118,7 @@ with open(PATH_API_KEY, "r") as f:
     key_openai = f.readline()
     f.close()
 
+# Tab - Setup
 with setup_tab:
     st.subheader("LLM Setup")
     api_key = st.text_input(key_openai, type="password")
@@ -131,12 +132,12 @@ with setup_tab:
         "The query to extract terms and definitions with.", value=DEFAULT_TERM_STR
     )
 
-
+# Tab - All Terms
 with terms_tab:
     st.subheader("Current Extracted Terms and Definitions")
     st.json(st.session_state["all_terms"])
 
-
+# Tab - Upload/Extract Terms
 with upload_tab:
     st.subheader("Extract and Query Definitions")
     if st.button("Initialize Index and Reset Terms", key="init_index_1"):
@@ -158,6 +159,7 @@ with upload_tab:
         ):
             st.session_state["terms"] = {}
             terms_docs = {}
+            # According to input type, Extract term from input data
             with st.spinner("Extracting (images may be slow)..."):
                 if document_text:
                     terms_docs.update(
@@ -186,7 +188,7 @@ with upload_tab:
                         )
                     )
             st.session_state["terms"].update(terms_docs)
-
+    # if "1 or more terms" in Current session_state, displaying extracted terms
     if "terms" in st.session_state and st.session_state["terms"]:
         st.markdown("Extracted terms")
         st.json(st.session_state["terms"])
@@ -194,10 +196,12 @@ with upload_tab:
         if st.button("Insert terms?"):
             with st.spinner("Inserting terms"):
                 insert_terms(st.session_state["terms"])
+            # Add extracted terms to all_terms(dict)
             st.session_state["all_terms"].update(st.session_state["terms"])
             st.session_state["terms"] = {}
             st.experimental_rerun()
 
+# Tab - Query Terms
 with query_tab:
     st.subheader("Query for Terms/Definitions!")
     st.markdown(
@@ -206,6 +210,7 @@ with query_tab:
             "If a term is not in the index, it will answer using it's internal knowledge."
         )
     )
+    # initialize all terms
     if st.button("Initialize Index and Reset Terms", key="init_index_2"):
         st.session_state["llama_index"] = initialize_index(
             llm_name, model_temperature, api_key
@@ -221,8 +226,8 @@ with query_tab:
                     .as_query_engine(
                         similarity_top_k=5,
                         response_mode="compact",
-                        text_qa_template=TEXT_QA_TEMPLATE,
-                        refine_template=REFINE_TEMPLATE,
+                        text_qa_template=TEXT_QA_TEMPLATE, # context 에서 답변
+                        refine_template=REFINE_TEMPLATE,   # 새로운 context에서 이전 답변을 다시 생성
                     )
                     .query(query_text)
                 )
