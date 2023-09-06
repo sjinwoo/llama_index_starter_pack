@@ -27,9 +27,11 @@ def initialize_index(
     """Create the GPTSQLStructStoreIndex object."""
     llm = get_llm(llm_name, model_temperature, api_key)
 
+    # DB 접속 엔진 생성 / DB URI로부터 엔진 생성
     engine = create_engine(sql_path)
     sql_database = llama_SQLDatabase(engine)
 
+    # SQLDatabase 객체와 table descrp 문맥으로 Container 객체 생성
     context_container = None
     if table_context_dict is not None:
         context_builder = SQLContextContainerBuilder(
@@ -61,6 +63,7 @@ def initialize_chain(llm_name, model_temperature, lc_descrp, api_key, _sql_index
 
     llm = get_llm(llm_name, model_temperature, api_key=api_key)
 
+    # chat history를 기억, chain 초기화
     memory = ConversationBufferMemory(memory_key="chat_history", return_messages=True)
 
     agent_chain = initialize_agent(
@@ -74,6 +77,7 @@ def initialize_chain(llm_name, model_temperature, lc_descrp, api_key, _sql_index
     return agent_chain
 
 
+# streamlit 
 st.title("🦙 Llama Index SQL Sandbox 🦙")
 st.markdown(
     (
