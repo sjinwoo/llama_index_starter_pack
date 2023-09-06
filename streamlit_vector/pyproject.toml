@@ -1,0 +1,19 @@
+[tool.poetry]
+name = "streamlit-vector"
+version = "0.1.0"
+description = ""
+authors = ["jwson"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+altair = "4.2.2"
+langchain = "0.0.154"
+streamlit = "1.19.0"
+transformers = "4.29.2"
+llama-index = "0.6.15"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
