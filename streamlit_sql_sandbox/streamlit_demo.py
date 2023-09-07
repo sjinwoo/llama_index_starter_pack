@@ -31,7 +31,7 @@ def initialize_index(
     engine = create_engine(sql_path)
     sql_database = llama_SQLDatabase(engine)
 
-    # SQLDatabase 객체와 table descrp 문맥으로 Container 객체 생성
+    # SQLDatabase 객체와 table descrp context로 Container 객체 생성
     context_container = None
     if table_context_dict is not None:
         context_builder = SQLContextContainerBuilder(
@@ -39,7 +39,10 @@ def initialize_index(
         )
         context_container = context_builder.build_context_container()
 
+    # indexing, querying을 위한 ServiceContext 객체
     service_context = ServiceContext.from_defaults(llm_predictor=LLMPredictor(llm=llm))
+
+    # NL query를 SQL로 추출
     index = GPTSQLStructStoreIndex(
         [],
         sql_database=sql_database,
@@ -128,13 +131,14 @@ with setup_tab:
 with llama_tab:
     st.subheader("Text2SQL with Llama Index")
     if st.button("Initialize Index", key="init_index_1"):
+        # 현재 세션에 index 초기화
         st.session_state["llama_index"] = initialize_index(
             llm_name,
             model_temperature,
             table_context_dict if use_table_descrp else None,
             api_key,
         )
-
+    
     if "llama_index" in st.session_state:
         query_text = st.text_input(
             "Query:", value="Which restaurant has the most violations?"
@@ -143,6 +147,7 @@ with llama_tab:
         if st.button("Run Query") and query_text:
             with st.spinner("Getting response..."):
                 try:
+                    # initialized index를 query engine으로 사용하고, query_text로 query
                     response = st.session_state["llama_index"].as_query_engine(synthesize_response=use_nl).query(query_text)
                     response_text = str(response)
                     response_sql = response.extra_info["sql_query"]
@@ -163,6 +168,7 @@ with lc_tab:
     st.subheader("Langchain + Llama Index SQL Demo")
 
     if st.button("Initialize Agent"):
+        # initialize index
         st.session_state["llama_index"] = initialize_index(
             llm_name,
             model_temperature,
