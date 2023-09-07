@@ -2,7 +2,11 @@ import os
 import pickle
 
 # NOTE: for local testing only, do NOT deploy with your key hardcoded
-os.environ['OPENAI_API_KEY'] = "your key here"
+with open("./key.txt", 'r') as f:
+    key = f.readline().rstrip()
+    f.close()
+
+os.environ['OPENAI_API_KEY'] = key
 
 from multiprocessing import Lock
 from multiprocessing.managers import BaseManager
@@ -75,7 +79,7 @@ if __name__ == "__main__":
 
     # setup server
     # NOTE: you might want to handle the password in a less hardcoded way
-    manager = BaseManager(('', 5602), b'password')
+    manager = BaseManager(('127.0.0.1', 5602), b'password')
     manager.register('query_index', query_index)
     manager.register('insert_into_index', insert_into_index)
     manager.register('get_documents_list', get_documents_list)
